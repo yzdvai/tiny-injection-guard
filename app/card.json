@@ -1,0 +1,137 @@
+{
+ "run": "run2",
+ "shipped": "electra-small",
+ "rows": [
+  {
+   "key": "electra-small-int8",
+   "name": "ELECTRA-small int8",
+   "kind": "this demo",
+   "params_m": 13.5,
+   "size_mb": 25.7,
+   "colab_cpu_ms": 21.1,
+   "threshold": 0.945,
+   "recall": {
+    "deepset": 0.148,
+    "llmail": 0.032,
+    "handmade": 0.3
+   },
+   "fpr": {
+    "notinject": 0.021,
+    "handmade_hard": 0.28
+   },
+   "f1_in_dist": 0.801
+  },
+  {
+   "key": "electra-small",
+   "name": "ELECTRA-small",
+   "kind": "ours",
+   "params_m": 13.5,
+   "size_mb": 54.3,
+   "colab_cpu_ms": 64.7,
+   "threshold": 0.945,
+   "recall": {
+    "deepset": 0.179,
+    "llmail": 0.032,
+    "handmade": 0.275
+   },
+   "fpr": {
+    "notinject": 0.024,
+    "handmade_hard": 0.28
+   },
+   "f1_in_dist": 0.8
+  },
+  {
+   "key": "deberta-v3-xsmall",
+   "name": "DeBERTa-v3-xsmall",
+   "kind": "ours",
+   "params_m": 70.8,
+   "size_mb": 283.4,
+   "colab_cpu_ms": 104.8,
+   "threshold": 0.93,
+   "recall": {
+    "deepset": 0.163,
+    "llmail": 0.04,
+    "handmade": 0.4
+   },
+   "fpr": {
+    "notinject": 0.018,
+    "handmade_hard": 0.2
+   },
+   "f1_in_dist": 0.77
+  },
+  {
+   "key": "protectai-v2",
+   "name": "ProtectAI DeBERTa v2",
+   "kind": "open guard",
+   "params_m": 184.4,
+   "size_mb": 737.8,
+   "colab_cpu_ms": 277.3,
+   "threshold": 0.5,
+   "recall": {
+    "deepset": 0.414,
+    "llmail": 0.408,
+    "handmade": 0.925
+   },
+   "fpr": {
+    "notinject": 0.434,
+    "handmade_hard": 0.32
+   },
+   "f1_in_dist": 0.642
+  },
+  {
+   "key": "piguard",
+   "name": "PIGuard",
+   "kind": "open guard",
+   "params_m": 184.4,
+   "size_mb": 737.8,
+   "colab_cpu_ms": 273.5,
+   "threshold": 0.5,
+   "recall": {
+    "deepset": 0.856,
+    "llmail": 0.472,
+    "handmade": 0.825
+   },
+   "fpr": {
+    "notinject": 0.115,
+    "handmade_hard": 0.12
+   },
+   "f1_in_dist": 0.718
+  },
+  {
+   "key": "tfidf-logreg",
+   "name": "TF-IDF + logistic regression",
+   "kind": "baseline",
+   "params_m": 0.2,
+   "size_mb": 9.9,
+   "colab_cpu_ms": 0.7,
+   "threshold": 0.77,
+   "recall": {
+    "deepset": 0.122,
+    "llmail": 0.028,
+    "handmade": 0.425
+   },
+   "fpr": {
+    "notinject": 0.009,
+    "handmade_hard": 0.08
+   },
+   "f1_in_dist": 0.821
+  }
+ ],
+ "run1_vs_run2": {
+  "notinject_fpr": {
+   "run1": 0.168,
+   "run2": 0.024
+  },
+  "handmade_hidden_recall": {
+   "run1": 0.14,
+   "run2": 0.0
+  }
+ },
+ "test_sets": {
+  "deepset": "deepset/prompt-injections (held-out source, 263 attacks)",
+  "llmail": "Microsoft LLMail-Inject (500 injected emails)",
+  "handmade": "40 hand-written attacks",
+  "notinject": "339 harmless prompts with trigger words",
+  "handmade_hard": "25 tricky harmless hand-written prompts"
+ }
+}

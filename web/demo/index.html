@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Injection Guard</title>
+  <meta name="description" content="A 14-million-parameter prompt-injection detector that runs in your browser.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2l11 4v9c0 7-4.7 12.4-11 15C9.7 27.4 5 22 5 15V6z' fill='%230071e3'/%3E%3Cpath d='M11 16l3.5 3.5L21 13' stroke='white' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+    <div class="blob b4"></div><div class="blob b5"></div>
+    <div class="dots"></div>
+  </div>
+  <svg class="lg-filters" aria-hidden="true" width="0" height="0"><defs id="lg-defs"></defs></svg>
+
+  <header class="nav glass" data-glass="soft">
+    <a class="brand" href="../">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2l11 4v9c0 7-4.7 12.4-11 15C9.7 27.4 5 22 5 15V6z"/><path class="check" d="M11 16l3.5 3.5L21 13"/></svg>
+      <span>Injection Guard</span>
+    </a>
+    <nav aria-label="Sections">
+      <a href="#demo">Demo</a>
+      <a href="#card">Model card</a>
+      <a href="../architecture/">Architecture</a>
+    </nav>
+    <button class="theme-toggle" id="theme" type="button" aria-label="Switch light or dark appearance">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
+    </button>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow">Capstone project · Transformer classifier</p>
+      <h1>Catch prompt injections<br>before they reach your LLM.</h1>
+      <p class="lede">A tiny model that reads a message, whether a user typed it or it came from an email,
+        a document or a web page, and flags text written to hijack your AI. It is small enough to run right here in your browser.</p>
+      <div class="stats">
+        <div class="glass tile" data-glass="soft"><span class="stat" id="stat-params">13.5M</span><span class="stat-label">parameters</span></div>
+        <div class="glass tile" data-glass="soft"><span class="stat" id="stat-size">14 MB</span><span class="stat-label">model download (int8)</span></div>
+        <div class="glass tile" data-glass="soft"><span class="stat" id="stat-ms">…</span><span class="stat-label" id="stat-ms-label">per message, measured in your browser</span></div>
+      </div>
+    </section>
+
+    <section id="demo" class="demo" aria-label="Live demo">
+      <div class="glass panel input-panel" data-glass="strong">
+        <label class="panel-title" for="text">Message to check</label>
+        <textarea id="text" maxlength="8000" spellcheck="false"
+          placeholder="Paste a prompt, an email, or a snippet from a web page…"></textarea>
+        <div class="input-row">
+          <span class="hint" id="count">0 / 8000</span>
+          <button class="btn primary" id="go" type="button" disabled>
+            <span>Check message</span><kbd id="kbd">⌘ ↵</kbd>
+          </button>
+        </div>
+        <div class="examples">
+          <div class="seg glass" data-glass="soft" role="tablist" aria-label="Example groups">
+            <span class="seg-thumb" aria-hidden="true"></span>
+            <button role="tab" aria-selected="true" data-group="attacks" type="button">Attacks</button>
+            <button role="tab" aria-selected="false" data-group="everyday" type="button">Everyday</button>
+            <button role="tab" aria-selected="false" data-group="tricky" type="button">Tricky but harmless</button>
+          </div>
+          <div class="chips" id="chips" role="tabpanel"></div>
+        </div>
+      </div>
+
+      <div class="glass panel result" id="result" data-state="idle" data-glass="strong" aria-live="polite">
+        <div class="verdict">
+          <span class="verdict-icon" aria-hidden="true">
+            <svg class="i-idle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+            <svg class="i-safe" viewBox="0 0 24 24"><path d="M6 12.5l4 4L18 8"/></svg>
+            <svg class="i-inj" viewBox="0 0 24 24"><path d="M12 7v6M12 17h.01"/></svg>
+          </span>
+          <span class="verdict-text" id="verdict">Loading</span>
+        </div>
+        <p class="verdict-sub" id="verdict-sub">Downloading the model (14 MB, first visit only)…</p>
+        <div class="gauge">
+          <div class="track">
+            <div class="fill" id="fill"></div>
+            <div class="tick" id="tick"><span id="tick-label">flag ≥ 0.945</span></div>
+          </div>
+          <div class="scale"><span>0</span><span>injection score</span><span>1</span></div>
+        </div>
+        <dl class="facts">
+          <div><dt>Score</dt><dd id="f-score">–</dd></div>
+          <div><dt>Latency</dt><dd id="f-ms">–</dd></div>
+          <div><dt>Tokens</dt><dd id="f-tokens">–</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section id="card" class="section">
+      <div class="section-head">
+        <h2>Model card</h2>
+        <p>How the guard compares with the two leading open-source prompt-injection guards.</p>
+      </div>
+
+      <div class="glass panel table-panel" data-glass="strong">
+        <div class="table-scroll">
+          <table id="size-table" class="size-table">
+            <thead>
+              <tr>
+                <th scope="col">Model</th>
+                <th scope="col">Parameters</th>
+                <th scope="col">Download</th>
+                <th scope="col">Time per message<sup>*</sup></th>
+                <th scope="col">Runs in your browser</th>
+                <th scope="col">Needs a server</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="footnote"><sup>*</sup> Measured one message at a time on the same 2-thread Colab CPU, with the full-precision version of our model.
+          The int8 version on this page is smaller still; its speed on your own device is shown at the top of the page.</p>
+      </div>
+
+      <div class="glass panel fa-panel" data-glass="strong">
+        <div class="fa-head"><h3>Harmless prompts wrongly blocked</h3><span>lower is better</span></div>
+        <p class="fa-sub">339 harmless prompts full of words like "ignore", "bypass" or "override" (the NotInject benchmark).</p>
+        <div class="fa-bars" id="fa-bars"></div>
+      </div>
+
+      <div class="notes">
+        <article class="glass panel note" data-glass="soft">
+          <h3><span class="dot good"></span>Small and private</h3>
+          <p><strong>14× fewer parameters</strong> and a <strong>52× smaller download</strong> than the leading open guards. It runs on your own
+            device: no server, no hosting bill, and your text never leaves your browser.</p>
+        </article>
+        <article class="glass panel note" data-glass="soft">
+          <h3><span class="dot good"></span>Rarely in your way</h3>
+          <p>It wrongly blocks about <strong>2%</strong> of tricky harmless prompts, where the big guards block 12% and 43%.
+            A guard that cries wolf gets switched off.</p>
+        </article>
+        <article class="glass panel note" data-glass="soft">
+          <h3><span class="dot info"></span>A first line of defence</h3>
+          <p>It's tuned to be cautious. It rarely blocks harmless text, but it can miss attacks written in unfamiliar styles,
+            which is why it's meant as a first layer, not the only one.</p>
+        </article>
+      </div>
+
+      <details class="glass panel full-eval">
+        <summary><b>Full evaluation</b><span>every model on every test set</span></summary>
+        <div class="table-scroll">
+          <table id="cmp">
+            <thead>
+              <tr class="group-row">
+                <th rowspan="2" scope="col">Model</th>
+                <th colspan="4" scope="colgroup">Attacks caught (recall) ↑</th>
+                <th colspan="3" scope="colgroup">Harmless texts flagged (false-positive rate) ↓</th>
+              </tr>
+              <tr>
+                <th scope="col" title="Held-out texts from the same six sources used for training">same sources</th>
+                <th scope="col" title="deepset/prompt-injections, a source never used in training">deepset</th>
+                <th scope="col" title="Microsoft LLMail-Inject: injected emails">emails</th>
+                <th scope="col" title="40 hand-written attacks">hand-made</th>
+                <th scope="col" title="Held-out harmless texts from the training sources">same sources</th>
+                <th scope="col" title="339 harmless prompts full of trigger words">NotInject</th>
+                <th scope="col" title="25 tricky harmless hand-written prompts">tricky</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="footnote"><b>Recall</b>: the share of real attacks the model flags. <b>False-positive rate</b>: the share of harmless texts it flags.
+          "Same sources" means held-out texts from the six datasets used for training; the other sets come from elsewhere. Thresholds:
+          ours 0.945 (tuned for at most 1% false alarms on validation data), the open guards 0.5 (their default). PIGuard was trained on deepset,
+          and ProtectAI on two of our training sources, so those scores are not fully held out for them. We chose our model after seeing two
+          training runs' test results, so its numbers are slightly optimistic. Its ONNX int8 version gives the same verdict as the full model on
+          <span id="parity">99.6%</span> of the test texts.</p>
+      </details>
+    </section>
+
+    <section id="how" class="section">
+      <div class="section-head">
+        <h2>How it works</h2>
+        <p>Three steps, each designed to avoid rewarding a model for memorising dataset style.</p>
+        <a class="btn primary arch-cta" href="../architecture/">Explore the architecture, layer by layer <span aria-hidden="true">→</span></a>
+      </div>
+      <ol class="steps">
+        <li class="glass panel step" data-glass="soft">
+          <span class="step-n">1</span>
+          <h3>Data</h3>
+          <p>About 20k texts from six public datasets. Exact and near-duplicates removed, related texts kept on the same side of the split,
+            and whole sources held out for testing.</p>
+        </li>
+        <li class="glass panel step" data-glass="soft">
+          <span class="step-n">2</span>
+          <h3>Fine-tune</h3>
+          <p>ELECTRA-small (14M parameters) trained as <em>benign</em> vs <em>injection</em> with early stopping. The decision
+            threshold is tuned so at most 1% of harmless validation texts are flagged.</p>
+        </li>
+        <li class="glass panel step" data-glass="soft">
+          <span class="step-n">3</span>
+          <h3>Ship</h3>
+          <p>Exported to ONNX and quantized to int8 (54 → 14 MB). It runs in your browser with transformers.js:
+            no server, and no LLM is called. The demo only runs the guard.</p>
+        </li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Capstone project, 2026</span>
+    <a id="model-link" href="https://huggingface.co/yzdvai/tiny-injection-guard" target="_blank" rel="noopener">Model on Hugging Face</a>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
