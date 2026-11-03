@@ -2,35 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>
+  /* English or Arabic before first paint: a ?lang= link wins, then the saved choice */
+  (function(){var r=document.documentElement,l=null;try{l=new URLSearchParams(location.search).get('lang');if(l)localStorage.setItem('lang',l);else l=localStorage.getItem('lang')}catch(e){}
+  if(l==='ar'){r.lang='ar';r.dir='rtl'}})();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Injection Guard</title>
-  <meta name="description" content="A 14-million-parameter Transformer that flags prompt injection before it reaches an AI. It runs in your browser.">
+  <title data-ar-text="Injection Guard – حارس ضد حقن الأوامر">Injection Guard</title>
+  <meta name="description" data-ar-content="نموذج Transformer بحجم 14 مليون معامل يكشف حقن الأوامر (Prompt Injection) قبل أن يصل إلى الذكاء الاصطناعي، ويعمل في متصفحك." content="A 14-million-parameter Transformer that flags prompt injection before it reaches an AI. It runs in your browser.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2l11 4v9c0 7-4.7 12.4-11 15C9.7 27.4 5 22 5 15V6z' fill='%230071e3'/%3E%3Cpath d='M11 16l3.5 3.5L21 13' stroke='white' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="landing.css">
 </head>
 <body>
-  <div class="backdrop" aria-hidden="true">
-    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-    <div class="blob b4"></div><div class="blob b5"></div>
-    <div class="dots"></div>
-  </div>
-  <svg class="lg-filters" aria-hidden="true" width="0" height="0"><defs id="lg-defs"></defs></svg>
 
-  <header class="nav glass" data-glass="soft">
+  <header class="nav">
+    <a class="home" href="/apps/" aria-label="Back to Yazeed’s apps" data-ar-aria-label="العودة إلى تطبيقات يزيد"><img src="/assets/face.png" alt="" width="32" height="32"></a>
     <a class="brand" href="./">
       <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2l11 4v9c0 7-4.7 12.4-11 15C9.7 27.4 5 22 5 15V6z"/><path class="check" d="M11 16l3.5 3.5L21 13"/></svg>
       <span>Injection Guard</span>
     </a>
-    <nav aria-label="Pages">
-      <a href="demo/">Demo</a>
-      <a href="architecture/">Architecture</a>
-      <a href="demo/#card">Model card</a>
+    <nav aria-label="Pages" data-ar-aria-label="الصفحات">
+      <a href="demo/"><span data-en>Demo</span><span data-ar>العرض</span></a>
+      <a href="architecture/"><span data-en>Architecture</span><span data-ar>البنية</span></a>
+      <a href="demo/#card"><span data-en>Model card</span><span data-ar>بطاقة النموذج</span></a>
     </nav>
-    <button class="theme-toggle" id="theme" type="button" aria-label="Switch light or dark appearance">
+    <button class="theme-toggle lang-toggle" id="lang" type="button"></button>
+    <button class="theme-toggle" id="theme" type="button" aria-label="Switch light or dark appearance" data-ar-aria-label="التبديل بين الوضع الفاتح والداكن">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
     </button>
   </header>
@@ -38,33 +39,34 @@
   <main>
     <section class="landing">
       <div class="intro">
-        <p class="eyebrow">Capstone project · AI &amp; Data Science</p>
-        <h1>A tiny guard against prompt injection.</h1>
-        <p class="lede">Prompt injection is text written to hijack an AI, like "ignore your instructions and…", typed by a user or hidden
+        <p class="eyebrow"><span data-en>AI &amp; Data Science</span><span data-ar>الذكاء الاصطناعي وعلم البيانات</span></p>
+        <h1><span data-en>A tiny guard against prompt injection.</span><span data-ar>حارس صغير ضد حقن الأوامر.</span></h1>
+        <p class="lede"><span data-en>Prompt injection is text written to hijack an AI, like "ignore your instructions and…", typed by a user or hidden
           in an email or web page. This small Transformer reads the text first and flags the attack before it reaches the model.
-          It is light enough to run on your own device, for free.</p>
-        <ul class="chips-row" aria-label="Key facts">
-          <li>14× smaller than leading open guards</li>
-          <li>about 4× faster</li>
-          <li>your text stays on your device</li>
-          <li>free to run</li>
+          It is light enough to run on your own device, for free.</span><span data-ar>حقن الأوامر (Prompt Injection) نص مكتوب ليسيطر على الذكاء الاصطناعي، مثل «تجاهل تعليماتك و…»، يكتبه المستخدم أو يُخفى في رسالة بريد أو صفحة ويب. هذا الـ Transformer الصغير يقرأ النص أولًا وينبّه إلى الهجوم قبل أن يصل إلى النموذج. وهو خفيف بما يكفي ليعمل على جهازك مجانًا.</span></p>
+        <p class="credit"><span data-en>By <b>Yazeed Alhifzi</b> and <b>Yahya Majrashi</b></span><span data-ar>من إعداد <b>يزيد الحفظي</b> و<b>يحيى المجرشي</b></span></p>
+        <ul class="chips-row" aria-label="Key facts" data-ar-aria-label="أبرز الحقائق">
+          <li><span data-en>14× smaller than leading open guards</span><span data-ar>أصغر 14 مرة من أبرز نماذج الحماية المفتوحة</span></li>
+          <li><span data-en>about 4× faster</span><span data-ar>أسرع بنحو 4 مرات</span></li>
+          <li><span data-en>your text stays on your device</span><span data-ar>نصّك يبقى على جهازك</span></li>
+          <li><span data-en>free to run</span><span data-ar>تشغيله مجاني</span></li>
         </ul>
         <div class="cta-row">
-          <a class="btn primary" href="demo/">Try the live demo <span aria-hidden="true">→</span></a>
-          <a class="btn ghost" href="architecture/">See how it works</a>
+          <a class="btn primary" href="demo/"><span data-en>Try the live demo</span><span data-ar>جرّب النموذج مباشرة</span> <span class="flip" aria-hidden="true">→</span></a>
+          <a class="btn ghost" href="architecture/"><span data-en>See how it works</span><span data-ar>شاهد كيف يعمل</span></a>
         </div>
       </div>
 
-      <figure class="glass panel qr-card" data-glass="strong">
-        <img src="qr.svg" alt="QR code that opens www.yazeed.quest/injection-guard" width="300" height="300">
-        <figcaption><b>Scan to try it on your phone</b><span>yazeed.quest/injection-guard</span></figcaption>
+      <figure class="glass panel qr-card">
+        <img src="qr.svg" alt="QR code that opens www.yazeed.quest/injection-guard" data-ar-alt="رمز QR يفتح www.yazeed.quest/injection-guard" width="300" height="300">
+        <figcaption><b><span data-en>Scan to try it on your phone</span><span data-ar>امسح الرمز لتجربته على هاتفك</span></b><span dir="ltr">yazeed.quest/injection-guard</span></figcaption>
       </figure>
     </section>
 
     <section class="figure-section" aria-labelledby="fig-title">
       <figure class="glass panel paper-fig">
         <svg class="fig" viewBox="0 0 600 920" role="img" aria-labelledby="fig-title fig-desc">
-          <title id="fig-title">Architecture of the injection guard</title>
+          <title id="fig-title">Architecture of the injection guard · بنية حارس حقن الأوامر</title>
           <desc id="fig-desc">Bottom to top: input text, WordPiece tokenizer, token embedding added to position and segment embeddings, LayerNorm and a
             projection from 128 to 256, then twelve encoder layers each made of multi-head attention, add and norm, feed forward, add and norm.
             The [CLS] vector goes to a classification head, a softmax and a threshold of 0.945, giving the verdict SAFE or INJECTION.</desc>
@@ -130,24 +132,25 @@
           <rect class="b tok" x="200" y="828" width="240" height="44" rx="8"/><text class="t" x="320" y="848">WordPiece tokenizer</text>
           <text class="s" x="320" y="864">[CLS] t₁ … tₙ [SEP]</text>
           <line class="arr" x1="320" y1="898" x2="320" y2="874" marker-end="url(#ah)"/>
-          <text class="in" x="320" y="914">Input text: a prompt, email or web page</text>
+          <text class="in" x="320" y="914"><tspan data-en>Input text: a prompt, email or web page</tspan><tspan data-ar>النص المُدخل: أمر أو رسالة بريد أو صفحة ويب</tspan></text>
         </svg>
-        <figcaption><b>Figure 1.</b> The guard is an ELECTRA-small Transformer encoder (13.5M parameters) with a classification head.
+        <figcaption><span data-en><b>Figure 1.</b> The guard is an ELECTRA-small Transformer encoder (13.5M parameters) with a classification head.
           Read it from the bottom up. Only the final <code>[CLS]</code> vector, which has gathered information from every token through
-          attention, is used for the decision. <a href="architecture/">Explore every layer interactively →</a></figcaption>
+          attention, is used for the decision. <a href="architecture/">Explore every layer interactively →</a></span><span data-ar><b>الشكل 1.</b> الحارس مُرمِّز Transformer من نوع ELECTRA-small (‏13.5 مليون معامل) مع رأس تصنيف. اقرأه من الأسفل إلى الأعلى. لا يُستخدم في القرار إلا متجه <code>[CLS]</code> الأخير، الذي جمع معلومات من كل Token عبر الانتباه (Attention). <a href="architecture/">استكشف كل طبقة تفاعليًا ←</a></span></figcaption>
       </figure>
     </section>
   </main>
 
   <footer class="footer">
-    <span>Capstone project, 2026</span>
-    <span><a href="demo/">Live demo</a> · <a href="architecture/">Architecture</a> · <a href="https://huggingface.co/yzdvai/tiny-injection-guard" target="_blank" rel="noopener">Model on Hugging Face</a></span>
+    <span><span data-en>By Yazeed Alhifzi and Yahya Majrashi</span><span data-ar>من إعداد يزيد الحفظي ويحيى المجرشي</span></span>
+    <span><a href="demo/"><span data-en>Live demo</span><span data-ar>العرض المباشر</span></a> · <a href="architecture/"><span data-en>Architecture</span><span data-ar>البنية</span></a> · <a href="https://huggingface.co/yzdvai/tiny-injection-guard" target="_blank" rel="noopener"><span data-en>Model on Hugging Face</span><span data-ar>النموذج على Hugging Face</span></a></span>
   </footer>
 
   <script type="module">
-    import { initTheme, initGlass } from "./glass.js";
+    import { initLang, initTheme } from "./glass.js";
+    initLang(document.querySelector("#lang"));
     initTheme(document.querySelector("#theme"));
-    initGlass();
   </script>
+<script src="/assets/hit.js" defer></script>
 </body>
 </html>
