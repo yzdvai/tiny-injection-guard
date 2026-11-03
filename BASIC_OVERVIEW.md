@@ -1,4 +1,4 @@
-# Tiny Injection Guard: beginner overview
+# Tiny Injection Guard: basic overview
 
 Documentation contribution by [Yahya Ali Majrashi (@iYm10)](https://github.com/iYm10), prepared with Codex assistance. Reviewed against the repository on 3 November 2026. This credit covers this overview; it does not assign authorship of earlier training or implementation work.
 
@@ -100,3 +100,10 @@ We built a tiny classifier to flag attempts to redirect an AI. We cleaned licens
 - [Merged site sync](https://github.com/yzdvai/tiny-injection-guard/pull/1).
 
 This overview summarizes recorded repository evidence. It does not reconstruct off-repository conversations or undocumented individual roles, and no training or benchmark was rerun for this documentation update.
+
+
+## Project infographics
+
+![Project overview](showcase/01-project-overview.png)
+
+![Experiments and lessons](showcase/02-experiments-and-lessons.png)
