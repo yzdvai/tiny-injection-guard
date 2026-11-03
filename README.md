@@ -23,12 +23,13 @@ PLAN.md                    the agreed data mix and model choices, and what chang
 results/
   run1/                    first Colab run: executed notebook, metrics, predictions, mistakes, plots
   run2/                    second run (the shipped model): the same files plus comparison_vs_run1.csv
-web/                       the live site (deployed to yzdvai.github.io under injection-guard/)
+web/                       the live site (served at www.yazeed.quest/injection-guard/)
   index.html               landing page: introduction, QR code, paper-style architecture figure
   demo/                    live demo: the int8 ONNX model runs in the browser with transformers.js
   architecture/            interactive walkthrough: real attention maps, vectors, parameters, training, maths
-  model/                   tokenizer, config and the two int8 ONNX models the pages load
-  glass.js, style.css      shared "liquid glass" look
+  model/                   tokenizer, config and the int8 ONNX models (the pages load model_explain_quantized.onnx
+                           only after a button click, see model-gate.js; model_quantized.onnx is for the tools' checks)
+  glass.js, style.css      shared look and the English/Arabic switch
 tools/
   export_onnx.py           PyTorch model → ONNX → int8, plus the attention-revealing model; checks int8 against PyTorch
   build_site_data.py       builds web/demo/card.json and web/architecture/arch-data.json from results/run2
@@ -58,7 +59,7 @@ python tools/build_site_data.py
 ```bash
 cd web && python -m http.server 8000
 ```
-Then open http://localhost:8000/. To deploy, copy `web/` into the `yzdvai.github.io` repository as `injection-guard/`.
+Then open http://localhost:8000/. To deploy, copy `web/` into the `yazeed.quest` repository as `injection-guard/`. Links to `/assets/` and `/apps/` point at the main site.
 
 **Offline backup (server version):** `cd app && pip install torch transformers fastapi uvicorn && uvicorn server:app --port 7860`. Here `requirements.txt` pins Linux CPU builds for a Docker deployment.
 

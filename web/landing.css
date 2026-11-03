@@ -5,19 +5,19 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0
   display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: 40px; align-items: center;
   padding: 72px 0 32px;
 }
-.intro h1 { font-size: clamp(2.3rem, 5vw, 4rem); line-height: 1.04; }
+.intro h1 { font-size: clamp(1.9rem, 3.6vw, 2.6rem); line-height: 1.15; }
 .intro .lede { margin: 22px 0 0; max-width: 560px; }
-.chips-row { list-style: none; padding: 0; margin: 24px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.chips-row { list-style: none; padding: 0; margin: 20px 0 0; display: flex; flex-wrap: wrap; gap: 4px 0; }
+.chips-row li + li::before { content: "·"; margin-inline: 8px; }
 .chips-row li {
-  padding: 7px 14px; border-radius: 999px; font-size: 13.5px; font-weight: 600; color: var(--ink-2);
-  background: var(--glass-inset); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  padding: 0; font-size: 14px; color: var(--ink-3);
 }
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-.cta-row .btn { text-decoration: none; padding: 14px 22px; font-size: 16px; }
-.btn.ghost { color: var(--ink); background: var(--glass-inset); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 18px rgba(20, 30, 80, 0.1); }
+.cta-row .btn { text-decoration: none; }
+.btn.ghost { color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
 
 .qr-card { margin: 0; padding: 22px 22px 18px; display: flex; flex-direction: column; align-items: center; gap: 14px; justify-self: end; width: min(100%, 360px); }
-.qr-card img { width: 100%; height: auto; display: block; border-radius: 22px; box-shadow: 0 10px 30px rgba(29, 78, 216, 0.22); }
+.qr-card img { width: 100%; height: auto; display: block; border-radius: 10px; }
 .qr-card figcaption { text-align: center; display: grid; gap: 2px; }
 .qr-card figcaption b { font-size: 16px; }
 .qr-card figcaption span { font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
@@ -56,7 +56,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0
 
 @media (max-width: 900px) {
   .landing { grid-template-columns: minmax(0, 1fr); gap: 28px; text-align: center; padding-top: 52px; }
-  .intro .lede { margin-left: auto; margin-right: auto; }
+  .intro .lede { margin-inline: auto; }
   .chips-row, .cta-row { justify-content: center; }
   .qr-card { justify-self: center; }
 }
