@@ -1,7 +1,5 @@
 # Tiny Injection Guard: basic overview
 
-Documentation contribution by [Yahya Ali Majrashi (@iYm10)](https://github.com/iYm10), prepared with Codex assistance. Reviewed against the repository on 3 November 2026. This credit covers this overview; it does not assign authorship of earlier training or implementation work.
-
 ## The project in 30 seconds
 
 Tiny Injection Guard is a small Transformer classifier that predicts whether text is benign or a prompt injection/jailbreak. It can check a prompt, email, document or web text before an LLM uses it. The shipped ELECTRA-small model has about 13.5 million learned parameters. Its compact int8 ONNX version runs in a browser after download. It is a capstone prototype: portable and fast, but it misses many unfamiliar attacks.
